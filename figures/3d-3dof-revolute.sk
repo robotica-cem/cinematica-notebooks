@@ -1,0 +1,7 @@
+def n_cyl_segs 20  def n_views 5  def I [1,0,0]
+  def endopts [fillcolor=lightgray]
+  repeat { n_views, rotate(180/n_views, [I]) then translate([I] * 2.1) } 
+    sweep[endopts]{ n_cyl_segs<>, rotate(360/n_cyl_segs, [0,1,0]) } 
+      line[fillcolor=white](1,-1)(1,1)
+
+global { language tikz }
