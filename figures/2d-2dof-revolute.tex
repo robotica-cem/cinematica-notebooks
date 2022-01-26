@@ -1,0 +1,51 @@
+\documentclass[border=10pt,varwidth]{standalone}
+\usepackage{tikz}
+
+\newcommand*{\link}[3]{%
+  \draw[thick, color=#3, rounded corners] (-3pt, -#2/2) rectangle (#1+3pt, #2/2);
+  \draw (0,0) circle[radius=1pt];
+  \draw (#1, 0) circle[radius=1pt];}
+
+\newcommand*{\tool}[2]{%
+  \draw[ultra thick, color=#2] (0,0) to (#1, 0);}
+
+\newcommand*{\refframe}[3]{%
+  \draw[->] (0,0) to (#1, 0) node[right]{#2};
+  \draw[->] (0,0) to (0, #1) node[above]{#3};} 
+
+\begin{document}
+
+\pgfmathsetmacro{\qone}{20}
+\pgfmathsetmacro{\qtwo}{30}
+\pgfmathsetmacro{\Lone}{2}
+\pgfmathsetmacro{\Ltwo}{1}
+\pgfmathsetmacro{\lwidth}{0.2}
+
+\begin{tikzpicture}[scale=2,]
+  \draw[->] (-1, 0) to (3,0) node[right] {$x$};
+  \draw[->] (0,-1) to (0,3) node[above] {$y$};
+
+  \begin{scope}[rotate=\qone]
+    \link{\Lone cm}{\lwidth}{blue!60!black}
+
+    
+    \draw[dashed] (\Lone/2, 0) to (1.5*\Lone, 0);
+    \begin{scope}[xshift=\Lone cm, rotate=\qtwo]
+      \link{\Ltwo cm}{\lwidth}{green!60!black}
+
+      \begin{scope}[xshift=\Ltwo cm]
+        \tool{0.3}{red!black!80}
+        \refframe{0.8 cm}{$x_e$}{$y_e$}
+      \end{scope}
+
+    \end{scope}
+
+      \draw[->] (\Lone + 2*\Ltwo/3, 0) arc[radius=2*\Ltwo/3, start angle=0, end angle=\qtwo] node[pos=0.5, right] {$q_2$};
+
+  \end{scope}
+
+  \draw[->] (2*\Lone/3, 0) arc[radius=2*\Lone/3, start angle=0, end angle=\qone] node[pos=0.5, right] {$q_1$};
+
+
+\end{tikzpicture}
+\end{document}
