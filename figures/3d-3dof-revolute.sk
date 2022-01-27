@@ -1,7 +1,63 @@
-def n_cyl_segs 20  def n_views 5  def I [1,0,0]
-  def endopts [fillcolor=lightgray]
-  repeat { n_views, rotate(180/n_views, [I]) then translate([I] * 2.1) } 
-    sweep[endopts]{ n_cyl_segs<>, rotate(360/n_cyl_segs, [0,1,0]) } 
-      line[fillcolor=white](1,-1)(1,1)
+def eye (5, 5, 5) % View point
+def look_at (0, 0, 0) 
+def up [0, 0, 1] % Up vector
+def O (0,0,0) % Origin
+def dx 3 def dy 3 def dz 3
+def ax (dx,0,0) % tips of the axes
+def ay (0,dy,0)
+def az (0,0,dz)
+ 
+def n_cyl_segs 30 def n_circle_segs 30
+def L1 2 def L2 1
+def V1 (0, L1, 0) def V2 (0, 0, L2)
+def endopts [fillcolor=lightgray]
+
+def link1 {
+    sweep [color=blue!80!black]{ 1, translate( [0,0,2]) }
+      sweep { n_circle_segs<>, rotate (360/n_circle_segs, [0, 0, 1]) } (0.2, 0, 0)
+      }
+def link2 {
+    sweep [color=red!80!black]{ 1, translate( [0,0,2]) }
+      sweep { n_circle_segs<>, rotate (360/n_circle_segs, [0, 0, 1]) } (0.2, 0, 2.2)
+      }
+
+special|\tikzstyle{mypolygonstyle} = [fill=blue!80,fill opacity=0.8]|[lay=under]
+
+def axes {
+line[arrows=<->,style=thin](ax)(O)(ay)
+line[arrows=->,style=thin](O)(az)
+% repeat dotted as an overlay to hint at the hidden lines
+line[lay=over,style=dotted,style=thin](ax)(O)(ay)
+line[lay=over,style=dotted,style=thin](O)(az) }
+
+def q1 30 def q2 20 def q3 30
+def T1 rotate( q1, [0,0,1])
+def T2 rotate( q2, [0, 1, 0])
+def jT1 [[T1]]*(0,0,2)
+def jT12 [[T2]]*(jT1)
+def T3 rotate( q3, (jT12), [0, 1, 0])
+
+def vT view((eye), (look_at), [up])
+def axT [[vT]]*(ax)
+def ayT [[vT]]*(ay)
+def azT [[vT]]*(az)
+special| \node[left] at #1 {$x$}; \node[right] at #2 {$y$}; \node[above] at #3 {$z$}; |
+    (axT)(ayT)(azT)
+
+
+
+def link1T {
+    put { [[T1]] then [[T2]] } {link1}
+    }
+def link2T {
+    put { [[T1]] then [[T2]] then [[T3]]} {link2}
+    }
+
+def robot { put { [[vT]] } { {link1T}{link2T}{axes} }
+}
+
+repeat { 3, rotate(15, (0,0,0), [0,1,0]) % copy in new position
+              then translate([3,0,3]) } {robot}
+
 
 global { language tikz }
