@@ -30,7 +30,7 @@ def ax (dx,0,0) % tips of the axes
 def ay (0,dy,0)
 def az (0,0,dz)
  
-def n_circle_segs 30
+def n_circle_segs 60
 
 def link1 {
     def sweep_point1 (j1)+[r1, 0, l1-r1]
@@ -58,19 +58,30 @@ def link2 {
 
 
 def joint {
-    def sweep_point (rj,0,lj/2)
-    def transl [0,0,-lj]
+    def sweep_point (0,rj,0.7*lj)
+    def sweep_point_cap (0,rj+0.005,0.7*lj)
+    def transl [0,0,-1.4*lj]
     def cross_section {
         sweep[color=black!40] { n_circle_segs<>, rotate (360/n_circle_segs,  [0,0,1]) } (sweep_point)
         }
-    %{cross_section}
-    %put {translate([transl])}{cross_section}
+    %def cross_section_cap {
+    %    sweep[color=black!40] { n_circle_segs<>, rotate (360/n_circle_segs,  [0,0,1]) } (sweep_point_cap)
+    %    }
+    {cross_section}
+    put {translate([transl]+[0,0,-0.01])}{cross_section}
     sweep [color=black!20]{ 1, translate([transl]) }{cross_section}
+    %put {translate([0,0, 0.03])} {sweep [color=black!40] {1, translate([0,0,0.03])}{cross_section_cap}}
+    }
+
+
+def joint2 {
+    put { rotate(90, [1,0,0]) then translate([vj1]) }{joint}
     }
 
 def joint3 {
     put { rotate(90, [1,0,0]) then translate([vj2]) }{joint}
     }
+
 
 special|\tikzstyle{mypolygonstyle} = [fill=blue!80,fill opacity=0.8]|[lay=under]
 
@@ -155,6 +166,9 @@ def refline2 {line [line style=dotted, color=gray] (j2T)(tpcT12) }
 def link1T {
     put { [[T2]] then [[T1]] } {link1}
     }
+def joint2T {
+    put { [[T1]] } {joint2}
+    }
 def joint3T {
     put { [[T2]] then [[T1]] } {joint3}
     }
@@ -162,7 +176,7 @@ def link2T {
     put { [[T3]] then [[T2]] then [[T1]]} {link2}
     }
 
-def robot { put { [[vT]] } { {link1T}{joint3T}{link2T}{axes}{arc1}{arc2}{refline2}{arc3} }
+def robot { put { [[vT]] } { {joint}{joint2T}{link1T}{joint3T}{link2T}{axes}{arc1}{arc2}{refline2}{arc3} }
 }
 
 {robot}
