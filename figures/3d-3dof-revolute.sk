@@ -157,9 +157,9 @@ def arcmid2vT [[vT]]*(arcmid2)
 def arcmid3 (rotate (-q3/2, (j2T), [v3T]))*( (scale (0.9))*(l2mid))
 def arcmid3vT [[vT]]*(arcmid3)
 
-special| \node[below] at #1 {\small $q_1$}; | (arcmid1vT)
-special| \node[above] at #1 {\small $q_2$}; | (arcmid2vT)
-special| \node[right] at #1 {\small $q_3$}; | (arcmid3vT)
+special| \node[below] at #1 {\small $\theta_1$}; | (arcmid1vT)
+special| \node[above] at #1 {\small $\theta_2$}; | (arcmid2vT)
+special| \node[right] at #1 {\small $\theta_3$}; | (arcmid3vT)
 
 def refline2 {line [line style=dotted, color=gray] (j2T)(tpcT12) }
 
